@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  
+  /* Custom colors for Tourvisto - Blues & Purples */
+  --primary-blue: #3b82f6;
+  --primary-purple: #8b5cf6;
+  --secondary-blue: #60a5fa;
+  --secondary-purple: #a78bfa;
+  --accent-blue: #2563eb;
+  --accent-purple: #7c3aed;
+  
+  /* Gradient backgrounds */
+  --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  --gradient-secondary: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+  --gradient-accent: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  /* Custom color definitions for Tailwind v4 */
+  --color-primary-blue: #3b82f6;
+  --color-primary-purple: #8b5cf6;
+  --color-secondary-blue: #60a5fa;
+  --color-secondary-purple: #a78bfa;
+  --color-accent-blue: #2563eb;
+  --color-accent-purple: #7c3aed;
+  
+  /* Font families */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Courier New', monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Gradient utility classes */
+.gradient-primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+}
