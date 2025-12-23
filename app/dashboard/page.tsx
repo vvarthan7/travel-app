@@ -1,7 +1,7 @@
 'use client';
 
 import { DashboardStats } from "@/types";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 // Mock stats data
 const MOCK_STATS: DashboardStats = {
@@ -14,15 +14,14 @@ const MOCK_STATS: DashboardStats = {
 export default function DashboardPage() {
   const [stats] = useState<DashboardStats>(MOCK_STATS);
 
-  // In a real app, fetch data from Supabase
-  useEffect(() => {
-    // Placeholder for future data fetching
-    // const fetchStats = async () => {
-    //   const data = await supabase.from('stats').select();
-    //   setStats(data);
-    // };
-    // fetchStats();
-  }, []);
+  // In a real app, fetch data from Supabase using useEffect
+  // useEffect(() => {
+  //   const fetchStats = async () => {
+  //     const { data } = await supabase.from('stats').select();
+  //     setStats(data);
+  //   };
+  //   fetchStats();
+  // }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">

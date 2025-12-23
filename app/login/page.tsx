@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/Button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { supabase } from "@/lib/supabase";
 import { useState } from "react";
@@ -12,6 +13,7 @@ interface LoginFormData {
 }
 
 export default function LoginPage() {
+  const router = useRouter();
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
@@ -29,9 +31,9 @@ export default function LoginPage() {
       if (error) throw error;
       
       setMessage({ type: 'success', text: 'Login successful! Redirecting...' });
-      // In a real app, redirect to dashboard
+      // Redirect to dashboard using Next.js router
       setTimeout(() => {
-        window.location.href = '/dashboard';
+        router.push('/dashboard');
       }, 1000);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Login failed. Please try again.';

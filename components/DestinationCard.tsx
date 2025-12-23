@@ -35,7 +35,12 @@ export default function DestinationCard({ destination }: DestinationCardProps) {
           <p className="text-sm text-gray-600">{destination.country}</p>
         </div>
         
-        <p className="text-gray-700 text-sm mb-4 line-clamp-2">
+        <p className="text-gray-700 text-sm mb-4 line-clamp-2" style={{ 
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden'
+        }}>
           {destination.description}
         </p>
         
