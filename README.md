@@ -14,7 +14,7 @@ This project is designed as per Figma specifications.
 
 - **Framework:** [Next.js 16](https://nextjs.org/)
 - **Language:** JavaScript / React 19
-- **Styling:** [Tailwind CSS 4](https://tailwindcss.com/), PostCSS
+- **Styling:** [Tailwind CSS 4](https://tailwindcss.com/)
 - **UI Components:** Radix UI, Lucide React
 - **AI Integration:** [Google Generative AI](https://ai.google.dev/)
 - **Backend / Database:** [Supabase](https://supabase.com/)
