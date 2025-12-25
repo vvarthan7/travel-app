@@ -5,6 +5,13 @@ import * as AvatarPrimitive from "@radix-ui/react-avatar"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Render an avatar wrapper using Radix UI's Avatar.Root with base styling and an optional className.
+ *
+ * @param {string} [className] - Additional CSS classes to merge with the component's default classes.
+ * @param {Object} [props] - Additional props forwarded to Radix Avatar.Root (e.g., id, style, aria attributes, children).
+ * @returns {JSX.Element} The rendered Avatar.Root element with merged classes and forwarded props.
+ */
 function Avatar({
   className,
   ...props
@@ -17,6 +24,12 @@ function Avatar({
   );
 }
 
+/**
+ * Render an avatar image element with merged class names and a `data-slot` of "avatar-image".
+ * @param {object} props - Component props.
+ * @param {string} [props.className] - Additional CSS class names appended to the default image classes.
+ * @returns {JSX.Element} The rendered Avatar.Image element.
+ */
 function AvatarImage({
   className,
   ...props
@@ -29,6 +42,12 @@ function AvatarImage({
   );
 }
 
+/**
+ * Renders an avatar fallback element displayed when an avatar image is unavailable.
+ * @param {string} [className] - Additional CSS class names to merge with the component's default classes.
+ * @param {Object} [props] - Additional props forwarded to the underlying Radix Avatar.Fallback element.
+ * @returns {JSX.Element} The rendered Avatar.Fallback element with composed classes and a `data-slot="avatar-fallback"` attribute.
+ */
 function AvatarFallback({
   className,
   ...props

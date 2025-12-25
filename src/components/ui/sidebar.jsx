@@ -33,6 +33,12 @@ const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
 const SidebarContext = React.createContext(null)
 
+/**
+ * Accesses the current sidebar context provided by SidebarProvider.
+ *
+ * @returns {object} The sidebar context value containing state, open flags, and action functions (e.g., `state`, `open`, `setOpen`, `isMobile`, `openMobile`, `setOpenMobile`, `toggleSidebar`).
+ * @throws {Error} If called outside of a SidebarProvider.
+ */
 function useSidebar() {
   const context = React.useContext(SidebarContext)
   if (!context) {
@@ -42,6 +48,20 @@ function useSidebar() {
   return context
 }
 
+/**
+ * Provides sidebar state and controls to descendants and renders the sidebar wrapper.
+ *
+ * Persists open state to a cookie and registers a keyboard shortcut (Ctrl/Cmd+B) to toggle the sidebar.
+ *
+ * @param {object} props - Component props.
+ * @param {boolean} [props.defaultOpen=true] - Initial open state when uncontrolled.
+ * @param {boolean} [props.open] - Controlled open state; when provided, the component is controlled.
+ * @param {(open:boolean) => void} [props.onOpenChange] - Callback invoked when the open state changes.
+ * @param {string} [props.className] - Additional class names applied to the wrapper element.
+ * @param {Object} [props.style] - Inline styles applied to the wrapper; CSS variables for sidebar widths are merged.
+ * @param {React.ReactNode} [props.children] - Children rendered inside the provider.
+ * @returns {JSX.Element} The provider element that supplies sidebar context and renders its children.
+ */
 function SidebarProvider({
   defaultOpen = true,
   open: openProp,
@@ -129,6 +149,19 @@ function SidebarProvider({
   );
 }
 
+/**
+ * Render a responsive, collapsible sidebar that adapts between desktop and mobile layouts.
+ *
+ * Supports fixed desktop layout with optional collapsible states and a mobile sheet drawer.
+ *
+ * @param {Object} props - Component props.
+ * @param {'left'|'right'} [props.side='left'] - Side of the screen where the sidebar is positioned.
+ * @param {'sidebar'|'floating'|'inset'} [props.variant='sidebar'] - Visual/layout variant that affects padding, borders, and shadow.
+ * @param {'offcanvas'|'icon'|'none'} [props.collapsible='offcanvas'] - Collapsibility mode; use "none" to render a non-collapsible fixed sidebar.
+ * @param {string} [props.className] - Additional className applied to the container element.
+ * @param {import('react').ReactNode} [props.children] - Child nodes rendered inside the sidebar.
+ * @returns {JSX.Element} The rendered sidebar element (desktop layout, mobile sheet, or static container depending on props and viewport).
+ */
 function Sidebar({
   side = "left",
   variant = "sidebar",
@@ -221,6 +254,14 @@ function Sidebar({
   );
 }
 
+/**
+ * Renders a compact trigger button that toggles the sidebar open state.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} [props.className] - Additional classes applied to the button.
+ * @param {(event: import('react').MouseEvent) => void} [props.onClick] - Optional click handler invoked before the sidebar is toggled.
+ * @returns {JSX.Element} The sidebar toggle button element.
+ */
 function SidebarTrigger({
   className,
   onClick,
@@ -246,6 +287,16 @@ function SidebarTrigger({
   );
 }
 
+/**
+ * Renders the sidebar rail toggle control.
+ *
+ * This component outputs a decorative, accessible button positioned alongside the sidebar
+ * that invokes the sidebar toggle action from context when clicked.
+ *
+ * @param {object} props - Component props.
+ * @param {string} [props.className] - Additional CSS class names applied to the button.
+ * @returns {JSX.Element} The sidebar rail button element.
+ */
 function SidebarRail({
   className,
   ...props
@@ -273,6 +324,13 @@ function SidebarRail({
   );
 }
 
+/**
+ * Render a responsive inset container for main content when the sidebar uses the inset variant.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} [props.className] - Additional CSS classes to apply to the main inset container.
+ * @returns {JSX.Element} A <main> element used as the inset content area; all other props are forwarded to the element.
+ */
 function SidebarInset({
   className,
   ...props
@@ -289,6 +347,13 @@ function SidebarInset({
   );
 }
 
+/**
+ * Render an Input pre-styled for use inside the sidebar.
+ *
+ * @param {object} props - Component props.
+ * @param {string} [props.className] - Additional CSS classes to merge with the component's base styles.
+ * @returns {JSX.Element} The styled Input element configured for sidebar placement.
+ */
 function SidebarInput({
   className,
   ...props
@@ -302,6 +367,13 @@ function SidebarInput({
   );
 }
 
+/**
+ * Renders a styled container intended to be used as the sidebar header.
+ *
+ * @param {object} props - Component props.
+ * @param {string} [props.className] - Additional CSS classes applied to the header container.
+ * @returns {JSX.Element} The sidebar header element.
+ */
 function SidebarHeader({
   className,
   ...props
@@ -315,6 +387,12 @@ function SidebarHeader({
   );
 }
 
+/**
+ * Renders a styled container for the sidebar footer.
+ * @param {string} [className] - Additional class names to apply to the footer container.
+ * @param {Object} [props] - Additional HTML attributes forwarded to the root `div`.
+ * @returns {JSX.Element} The rendered footer container element.
+ */
 function SidebarFooter({
   className,
   ...props
@@ -328,6 +406,13 @@ function SidebarFooter({
   );
 }
 
+/**
+ * Render a themed sidebar separator element.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} [props.className] - Additional CSS classes to apply to the separator.
+ * @returns {JSX.Element} The Separator element configured for the sidebar.
+ */
 function SidebarSeparator({
   className,
   ...props
@@ -341,6 +426,14 @@ function SidebarSeparator({
   );
 }
 
+/**
+ * Renders the scrollable content area for a sidebar.
+ *
+ * The root element includes data attributes for slotning and variant-aware styling, exposes a `className` prop to extend or override default layout and overflow styles, and forwards any additional props to the container div.
+ *
+ * @param {object} props - Props forwarded to the root div.
+ * @param {string} [props.className] - Additional class names to apply to the container.
+ * @returns {JSX.Element} A div element that serves as the sidebar's content container. */
 function SidebarContent({
   className,
   ...props
@@ -357,6 +450,16 @@ function SidebarContent({
   );
 }
 
+/**
+ * Renders a container that groups related sidebar items.
+ *
+ * The element includes data attributes (`data-slot="sidebar-group"` and `data-sidebar="group"`)
+ * used for styling and layout, and forwards any additional props to the underlying div.
+ *
+ * @param {object} props - Props passed to the component.
+ * @param {string} [props.className] - Additional CSS classes to apply to the container.
+ * @returns {JSX.Element} The sidebar group wrapper element.
+ */
 function SidebarGroup({
   className,
   ...props
@@ -370,6 +473,14 @@ function SidebarGroup({
   );
 }
 
+/**
+ * Renders a styled label for a sidebar group and optionally delegates rendering to a child element.
+ *
+ * @param {Object} props
+ * @param {string} [props.className] - Additional CSS classes applied to the label container.
+ * @param {boolean} [props.asChild=false] - When true, renders a `Slot` so the caller can provide the actual element; otherwise renders a `div`.
+ * @returns {import('react').ReactElement} A React element representing the sidebar group label.
+ */
 function SidebarGroupLabel({
   className,
   asChild = false,
@@ -390,6 +501,15 @@ function SidebarGroupLabel({
   );
 }
 
+/**
+ * Renders an action control positioned for a sidebar group that can be rendered either as a native button or as a provided child element.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} [props.className] - Additional CSS classes applied to the control.
+ * @param {boolean} [props.asChild=false] - When true, renders the control using a Slot wrapper so the caller's element receives the control behavior and attributes.
+ * @param {...any} [props] - Additional props are forwarded to the rendered element (e.g., event handlers, aria attributes).
+ * @returns {JSX.Element} The rendered sidebar group action element.
+ */
 function SidebarGroupAction({
   className,
   asChild = false,
@@ -412,6 +532,13 @@ function SidebarGroupAction({
   );
 }
 
+/**
+ * Renders the content container for a sidebar group.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} [props.className] - Additional CSS classes to apply to the container.
+ * @returns {JSX.Element} A div element that serves as the sidebar group's content area. Additional props are forwarded to the underlying div.
+ */
 function SidebarGroupContent({
   className,
   ...props
@@ -425,6 +552,13 @@ function SidebarGroupContent({
   );
 }
 
+/**
+ * Render a vertical list container for sidebar menu items.
+ *
+ * @param {Object} props
+ * @param {string} [props.className] - Additional class names to apply to the root `ul`.
+ * @returns {JSX.Element} A `ul` element used as the sidebar menu container with layout and data attributes applied.
+ */
 function SidebarMenu({
   className,
   ...props
@@ -438,6 +572,13 @@ function SidebarMenu({
   );
 }
 
+/**
+ * Renders a sidebar menu list item (<li>) with default data attributes and base classes, forwarding additional props to the element.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} [props.className] - Additional CSS classes to merge with the component's base classes.
+ * @returns {JSX.Element} The rendered `<li>` element for a sidebar menu item.
+ */
 function SidebarMenuItem({
   className,
   ...props
@@ -473,6 +614,19 @@ const sidebarMenuButtonVariants = cva(
   }
 )
 
+/**
+ * Render a sidebar menu button with configurable variant, size, active state, and optional tooltip.
+ *
+ * @param {Object} props - Component props.
+ * @param {boolean} [props.asChild=false] - If true, renders a Slot instead of a native button to allow custom child elements.
+ * @param {boolean} [props.isActive=false] - Marks the button as active (affects data attributes and styling).
+ * @param {"default"|"ghost"|"secondary"} [props.variant="default"] - Visual variant for the button (controls computed classes).
+ * @param {"default"|"sm"|"lg"} [props.size="default"] - Size variant for the button (controls computed classes).
+ * @param {string|Object} [props.tooltip] - Tooltip content or props. If a string, it is used as the tooltip text; if an object, its properties are forwarded to the TooltipContent.
+ * @param {string} [props.className] - Additional class names applied to the button.
+ * @param {...any} [props.props] - Additional props forwarded to the underlying element (button or Slot).
+ * @returns {JSX.Element} A React element for the menu button; when `tooltip` is provided, the button is wrapped in a Tooltip.
+ */
 function SidebarMenuButton({
   asChild = false,
   isActive = false,
@@ -517,6 +671,18 @@ function SidebarMenuButton({
   );
 }
 
+/**
+ * Renders a positioned action control for a sidebar menu item.
+ *
+ * The control is placed at the top-right of a menu item, supports rendering as a Slot when `asChild`
+ * is true, and can be configured to only become visible on hover/active states via `showOnHover`.
+ *
+ * @param {Object} props
+ * @param {string} [props.className] - Additional CSS classes applied to the control.
+ * @param {boolean} [props.asChild=false] - Render a Slot instead of a native `button`, allowing consumers to provide the element.
+ * @param {boolean} [props.showOnHover=false] - When true, hides the control by default and reveals it on hover/active/focus states.
+ * @returns {JSX.Element} The menu action element (button or Slot) ready to receive event handlers and children.
+ */
 function SidebarMenuAction({
   className,
   asChild = false,
@@ -545,6 +711,14 @@ function SidebarMenuAction({
   );
 }
 
+/**
+ * Renders a small positioned badge for a sidebar menu item.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} [props.className] - Additional CSS classes to apply to the badge container.
+ * @param {...any} [props] - Additional attributes forwarded to the badge's div element.
+ * @returns {JSX.Element} The badge element to display alongside a sidebar menu item.
+ */
 function SidebarMenuBadge({
   className,
   ...props
@@ -566,6 +740,15 @@ function SidebarMenuBadge({
   );
 }
 
+/**
+ * Render a skeleton placeholder for a sidebar menu item.
+ *
+ * @param {object} params - Component props.
+ * @param {string} [params.className] - Additional CSS classes to apply to the root container.
+ * @param {boolean} [params.showIcon=false] - Include a square icon placeholder when true.
+ * @param {object} [params.props] - Additional props forwarded to the root div.
+ * @returns {JSX.Element} A JSX element representing the sidebar menu item skeleton.
+ */
 function SidebarMenuSkeleton({
   className,
   showIcon = false,
@@ -597,6 +780,14 @@ function SidebarMenuSkeleton({
   );
 }
 
+/**
+ * Render a nested submenu list for the sidebar with built-in layout and collapse-aware styling.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} [props.className] - Additional class names to apply to the root <ul>.
+ * @param {import('react').HTMLAttributes<HTMLUListElement>} [props...] - All other props are forwarded to the underlying <ul> element.
+ * @returns {JSX.Element} A JSX <ul> element representing a nested sidebar sub-menu.
+ */
 function SidebarMenuSub({
   className,
   ...props
@@ -614,6 +805,14 @@ function SidebarMenuSub({
   );
 }
 
+/**
+ * Render a list item that represents a sidebar sub-menu item.
+ *
+ * @param {object} props - Component props.
+ * @param {string} [props.className] - Additional CSS classes applied to the list item.
+ * @param {...any} [props.rest] - Additional props are forwarded to the underlying `li` element.
+ * @returns {JSX.Element} The rendered `li` element for a sidebar sub-menu item.
+ */
 function SidebarMenuSubItem({
   className,
   ...props
@@ -627,6 +826,15 @@ function SidebarMenuSubItem({
   );
 }
 
+/**
+ * Render a sidebar sub-menu button used for nested menu items, optionally rendering a provided child element instead of an anchor.
+ *
+ * @param {Object} props - Component props.
+ * @param {boolean} [props.asChild=false] - If true, render the provided child via Slot instead of an `<a>` element.
+ * @param {"sm"|"md"} [props.size="md"] - Size variant that adjusts typography and spacing.
+ * @param {boolean} [props.isActive=false] - When true, apply active styling.
+ * @param {string} [props.className] - Additional CSS classes applied to the root element.
+ * @returns {JSX.Element} The rendered sub-menu button element. */
 function SidebarMenuSubButton({
   asChild = false,
   size = "md",

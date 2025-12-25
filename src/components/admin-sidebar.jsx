@@ -17,6 +17,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+/**
+ * Render the admin navigation sidebar for admin pages.
+ *
+ * The sidebar includes a header with the site logo and title, a navigation menu
+ * with Dashboard, All Users, and AI Trips items (each highlighting when the
+ * current route matches), and a footer displaying the admin avatar, name,
+ * email, and a logout icon.
+ *
+ * @returns {JSX.Element} The sidebar element ready to be included in the admin layout.
+ */
 export function AdminSidebar() {
   const pathname = usePathname();
 
