@@ -1,3 +1,5 @@
+import { AdminLayout } from "@/components/admin-layout";
+
 export default function Users() {
-  return <div>Users Page</div>;
+  return <AdminLayout title="Users"></AdminLayout>;
 }

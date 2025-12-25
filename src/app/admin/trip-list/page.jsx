@@ -1,4 +1,6 @@
+import { AdminLayout } from "@/components/admin-layout";
+
 const TripList = () => {
-  return <div>Trip List</div>;
+  return <AdminLayout title="AI Trips"></AdminLayout>;
 };
 export default TripList;
