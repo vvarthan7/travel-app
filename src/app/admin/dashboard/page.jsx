@@ -1,3 +1,13 @@
+import { AdminLayout } from "@/components/admin-layout";
+
 export default function Dashboard() {
-  return <div>Dashboard Page</div>;
+  return (
+    <AdminLayout title="Dashboard">
+      <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+        <div className="aspect-video rounded-xl bg-muted/50" />
+        <div className="aspect-video rounded-xl bg-muted/50" />
+        <div className="aspect-video rounded-xl bg-muted/50" />
+      </div>
+    </AdminLayout>
+  );
 }
