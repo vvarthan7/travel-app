@@ -14,7 +14,7 @@ export function AdminLayout({ title, description, user, ctaLabel, children }) {
           description={description}
           ctaLabel={ctaLabel}
         />
-        <div>{children}</div>
+        <section className="px-4 mt-10">{children}</section>
       </SidebarInset>
     </SidebarProvider>
   );
