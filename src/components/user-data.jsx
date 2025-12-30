@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const UserData = ({ data, status }) => {
   return (
-    <div className="relative min-h-[400px]">
+    <div className="relative min-h-100">
       <div
         className={`absolute inset-0 flex justify-center items-center p-10 bg-gray-100 rounded-xl transition-opacity duration-500 ${
           status === "pending" ? "opacity-100" : "opacity-0"

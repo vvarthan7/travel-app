@@ -7,7 +7,13 @@ import AdminHeader from "./admin-header";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export function AdminLayout({ title, description, user, ctaLabel, children }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        experimental_prefetchInRender: true,
+      },
+    },
+  });
 
   return (
     <QueryClientProvider client={queryClient}>
