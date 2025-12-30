@@ -21,6 +21,7 @@ export const PaginationComponent = ({
         <PaginationPrevious
           onClick={() => setPage((old) => Math.max(old - 1, 1))}
           disabled={page === 1}
+          className="cursor-pointer"
         />
       </PaginationItem>
       {visiblePages[0] > 1 && (
@@ -33,6 +34,7 @@ export const PaginationComponent = ({
           <PaginationLink
             isActive={page === pageNum}
             onClick={() => setPage(pageNum)}
+            className="cursor-pointer"
           >
             {pageNum}
           </PaginationLink>
@@ -51,6 +53,7 @@ export const PaginationComponent = ({
             }
           }}
           disabled={isPlaceholderData || page === totalPages}
+          className="cursor-pointer"
         />
       </PaginationItem>
     </PaginationContent>

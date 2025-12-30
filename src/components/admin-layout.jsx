@@ -1,13 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AdminSidebar } from "@/components/admin-sidebar";
 import AdminHeader from "./admin-header";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const queryClient = new QueryClient();
-
 export function AdminLayout({ title, description, user, ctaLabel, children }) {
+  const [queryClient] = useState(() => new QueryClient());
+
   return (
     <QueryClientProvider client={queryClient}>
       <SidebarProvider>

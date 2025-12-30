@@ -1,8 +1,8 @@
-'use client";';
+"use client";
 
 import { fetchUsersData } from "../lib/supabase";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { PaginationComponent } from "./pagination";
 import { UserListHeaderComponent } from "./user-list-header";
 import UserData from "./user-data";
@@ -12,9 +12,9 @@ const Userslist = () => {
   const limit = 8;
 
   const { status, data, error, isFetching, isPlaceholderData } = useQuery({
-    queryKey: ["posts", page], // Key changes with page number
+    queryKey: ["users", page], // Key changes with page number
     queryFn: () => fetchUsersData(page, limit),
-    keepPreviousData: true, // Keeps the old data visible while fetching the new page
+    placeholderData: keepPreviousData, // Keeps the old data visible while fetching the new page
   });
 
   if (status === "error") return <div>Error: {error.message}</div>;
@@ -29,7 +29,7 @@ const Userslist = () => {
 
   return (
     <>
-      <div className="border border-[#EEF9FF] rounded-lg overflow-auto p-6">
+      <div className="border border-[#EEF9FF] rounded-lg overflow-auto">
         <UserListHeaderComponent />
         <UserData data={data} status={status} />
         <PaginationComponent

@@ -16,14 +16,14 @@ const UserData = ({ data, status }) => {
         />
       </div>
       <div
-        className={`transition-opacity duration-500 grid grid-cols-1 lg:grid-cols-1 ${
+        className={`transition-opacity duration-500 grid grid-cols-1 lg:grid-cols-1 gap-2.5 lg:gap-0 ${
           status !== "pending" ? "opacity-100" : "opacity-0"
         }`}
       >
         {data?.data?.map((user) => (
           <div
             key={user.id}
-            className="flex flex-col lg:grid lg:grid-cols-[1fr_1fr_0.7fr_0.7fr_0.5fr_0.3fr] gap-4 py-4 px-6 border border-[#EEF9FF] rounded-lg odd:bg-light-200 hover:bg-gray-50 transition-colors bg-white"
+            className="flex flex-col lg:grid lg:grid-cols-[1fr_1fr_0.7fr_0.7fr_0.5fr_0.3fr] gap-4 py-4 px-6 border border-[#EEF9FF] odd:bg-light-200 hover:bg-gray-50 transition-colors bg-white"
           >
             <div className="flex flex-col lg:flex-row lg:items-center">
               <span className="text-xs text-gray-500 lg:hidden font-medium">
