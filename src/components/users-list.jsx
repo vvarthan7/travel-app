@@ -1,82 +1,46 @@
 'use client";';
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { supabase } from "../lib/supabase";
-import { useEffect, useState } from "react";
-import Image from "next/image";
+
+import { fetchUsersData } from "../lib/supabase";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { PaginationComponent } from "./pagination";
+import { UserListHeaderComponent } from "./user-list-header";
+import UserData from "./user-data";
 
 const Userslist = () => {
-  const [fetchError, setFetchError] = useState(null);
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const limit = 8;
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      setLoading(true);
-      const { data, error } = await supabase.from("users").select("*");
-      if (error) {
-        setFetchError("Could not fetch users");
-        setLoading(false);
-        return;
-      }
-      if (data) {
-        setUsers(data);
-        setLoading(false);
-      }
-    };
-    fetchUsers();
-  }, []);
+  const { status, data, error, isFetching, isPlaceholderData } = useQuery({
+    queryKey: ["posts", page], // Key changes with page number
+    queryFn: () => fetchUsersData(page, limit),
+    keepPreviousData: true, // Keeps the old data visible while fetching the new page
+  });
+
+  if (status === "error") return <div>Error: {error.message}</div>;
+  const totalPages = data ? Math.ceil(data.count / limit) : 0;
+  const delta = 1;
+  const start = Math.max(1, page - delta);
+  const end = Math.min(totalPages, page + delta);
+  const visiblePages = Array.from(
+    { length: end - start + 1 },
+    (_, i) => start + i
+  );
 
   return (
-    <Table className="border-2 border-[#EEF9FF] shadow-2xl shadow-black rounded-lg">
-      <TableHeader className="border-0 bg-white rounded-2xl">
-        <TableRow className="border-0">
-          <TableHead className="py-4">Name</TableHead>
-          <TableHead className="py-4">Email Address</TableHead>
-          <TableHead className="py-4">Date Joined</TableHead>
-          <TableHead className="py-4">Itinerary Created</TableHead>
-          <TableHead className="py-4">Status</TableHead>
-          <TableHead className="py-4"></TableHead>
-        </TableRow>
-      </TableHeader>
-
-      <TableBody>
-        {users.map((user) => (
-          <TableRow key={user.id} className="odd:bg-light-200 border-0">
-            <TableCell className="py-4">
-              {user.first_name} {user.last_name}
-            </TableCell>
-            <TableCell className="py-4">{user.email}</TableCell>
-            <TableCell className="py-4">
-              {new Date(user.created_at).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
-            </TableCell>
-            <TableCell>{user.itinerary_created || 0}</TableCell>
-            <TableCell>{user.role}</TableCell>
-            <TableCell>
-              <button className="cursor-pointer">
-                <Image
-                  src="/assets/icons/trash.svg"
-                  alt="trash"
-                  width={20}
-                  height={20}
-                />
-              </button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <>
+      <div className="border border-[#EEF9FF] rounded-lg overflow-auto p-6">
+        <UserListHeaderComponent />
+        <UserData data={data} status={status} />
+        <PaginationComponent
+          page={page}
+          setPage={setPage}
+          totalPages={totalPages}
+          isPlaceholderData={isPlaceholderData}
+          visiblePages={visiblePages}
+        />
+      </div>
+    </>
   );
 };
 export default Userslist;

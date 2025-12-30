@@ -16,3 +16,19 @@ if (!supabaseKey) {
 }
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
+
+export const fetchUsersData = async (page, limit = 8) => {
+  const start = (page - 1) * limit;
+  const end = start + limit - 1;
+
+  const { data, error, count } = await supabase
+    .from("users")
+    .select("*", { count: "exact" }) // Get the total count for pagination info
+    .range(start, end); // Use the range method for pagination
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return { data, count };
+};
