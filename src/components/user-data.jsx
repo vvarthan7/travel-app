@@ -2,10 +2,10 @@ import Image from "next/image";
 
 const UserData = ({ data, status }) => {
   return (
-    <div className="relative min-h-[400px]">
+    <div className="relative min-h-100">
       <div
-        className={`absolute inset-0 flex justify-center items-center p-10 bg-gray-100 rounded-xl transition-opacity duration-500 ${
-          status === "pending" ? "opacity-100" : "opacity-0"
+        className={`absolute inset-0 flex justify-center items-center p-10 bg-gray-50 rounded-xl transition-opacity duration-500 ${
+          status === "pending" ? "opacity-100" : "hidden opacity-0"
         }`}
       >
         <Image
@@ -17,7 +17,7 @@ const UserData = ({ data, status }) => {
       </div>
       <div
         className={`transition-opacity duration-500 grid grid-cols-1 lg:grid-cols-1 gap-2.5 lg:gap-0 ${
-          status !== "pending" ? "opacity-100" : "opacity-0"
+          status !== "pending" ? "opacity-100" : "hidden opacity-0"
         }`}
       >
         {data?.data?.map((user) => (
@@ -30,6 +30,15 @@ const UserData = ({ data, status }) => {
                 Name:
               </span>
               <span className="text-sm md:text-base text-gray-900 font-semibold lg:text-gray-900">
+                <Image
+                  src={`https://mockmind-api.uifaces.co/content/human/${
+                    user.itinerary_created === 0 ? 1 : user.itinerary_created
+                  }.jpg`}
+                  alt="User Avatar"
+                  width={40}
+                  height={40}
+                  className="mr-3 rounded-full inline-block"
+                />
                 {user.first_name} {user.last_name}
               </span>
             </div>
@@ -41,7 +50,7 @@ const UserData = ({ data, status }) => {
                 {user.email}
               </span>
             </div>
-            <div className="flex flex-col lg:flex-row lg:items-center">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-center">
               <span className="text-xs text-gray-500 lg:hidden font-medium">
                 Date Joined:
               </span>
@@ -53,7 +62,7 @@ const UserData = ({ data, status }) => {
                 })}
               </span>
             </div>
-            <div className="flex flex-col lg:flex-row lg:items-center">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-center">
               <span className="text-xs text-gray-500 lg:hidden font-medium">
                 Itinerary Created:
               </span>
@@ -61,7 +70,7 @@ const UserData = ({ data, status }) => {
                 {user.itinerary_created}
               </span>
             </div>
-            <div className="flex flex-col lg:flex-row lg:items-center">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-end">
               <span className="text-xs text-gray-500 lg:hidden font-medium">
                 Status:
               </span>
@@ -75,7 +84,7 @@ const UserData = ({ data, status }) => {
                 {user.role}
               </span>
             </div>
-            <div className="flex flex-col lg:flex-row lg:items-center">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-end">
               <span className="text-xs text-gray-500 lg:hidden font-medium">
                 Actions:
               </span>

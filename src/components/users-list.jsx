@@ -23,9 +23,9 @@ const Userslist = () => {
   const start = Math.max(1, page - delta);
   const end = Math.min(totalPages, page + delta);
   const visiblePages = Array.from(
-    { length: end - start + 1 },
+    { length: end - start + 5 },
     (_, i) => start + i
-  );
+  ).filter((pageNumber) => pageNumber <= totalPages);
 
   return (
     <>
