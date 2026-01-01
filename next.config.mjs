@@ -2,6 +2,9 @@
 const nextConfig = {
   /* config options here */
   reactCompiler: true,
+  images: {
+    remotePatterns: [{ hostname: "mockmind-api.uifaces.co" }],
+  },
 };
 
 export default nextConfig;

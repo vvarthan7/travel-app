@@ -72,13 +72,13 @@ export const PaginationComponent = ({
             : "cursor-pointer hover:bg-gray-50"
         }`}
       >
+        Next
         <Image
           src="/assets/icons/arrow-right.svg"
           alt="Next"
           width={14}
           height={14}
         />
-        Next
       </button>
     </div>
   </div>

@@ -4,8 +4,8 @@ const UserData = ({ data, status }) => {
   return (
     <div className="relative min-h-100">
       <div
-        className={`absolute inset-0 flex justify-center items-center p-10 bg-gray-100 rounded-xl transition-opacity duration-500 ${
-          status === "pending" ? "opacity-100" : "display-none opacity-0"
+        className={`absolute inset-0 flex justify-center items-center p-10 bg-gray-50 rounded-xl transition-opacity duration-500 ${
+          status === "pending" ? "opacity-100" : "hidden opacity-0"
         }`}
       >
         <Image
@@ -17,7 +17,7 @@ const UserData = ({ data, status }) => {
       </div>
       <div
         className={`transition-opacity duration-500 grid grid-cols-1 lg:grid-cols-1 gap-2.5 lg:gap-0 ${
-          status !== "pending" ? "opacity-100" : "display-none opacity-0"
+          status !== "pending" ? "opacity-100" : "hidden opacity-0"
         }`}
       >
         {data?.data?.map((user) => (
@@ -31,7 +31,9 @@ const UserData = ({ data, status }) => {
               </span>
               <span className="text-sm md:text-base text-gray-900 font-semibold lg:text-gray-900">
                 <Image
-                  src="/assets/images/david.webp"
+                  src={`https://mockmind-api.uifaces.co/content/human/${
+                    user.itinerary_created == 0 ? 1 : user.itinerary_created
+                  }.jpg`}
                   alt="User Avatar"
                   width={40}
                   height={40}
