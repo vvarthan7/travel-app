@@ -32,7 +32,7 @@ const UserData = ({ data, status }) => {
               <span className="text-sm md:text-base text-gray-900 font-semibold lg:text-gray-900">
                 <Image
                   src={`https://mockmind-api.uifaces.co/content/human/${
-                    user.itinerary_created == 0 ? 1 : user.itinerary_created
+                    user.itinerary_created === 0 ? 1 : user.itinerary_created
                   }.jpg`}
                   alt="User Avatar"
                   width={40}
