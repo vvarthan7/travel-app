@@ -50,24 +50,41 @@ const TripDetail = () => {
           <span>{trip.country}</span>
         </div>
         <div>
-          <Image
-            src="/assets/images/sample.jpeg"
-            alt="Trip Image"
-            width={600}
-            height={400}
-          />
-          <Image
-            src="/assets/images/sample1.jpg"
-            alt="Trip Image"
-            width={600}
-            height={400}
-          />
-          <Image
-            src="/assets/images/sample2.jpg"
-            alt="Trip Image"
-            width={600}
-            height={400}
-          />
+          {trip.images && trip.images.length >= 3 ? (
+            trip.images.slice(0, 3).map((imageUrl, index) => (
+              <Image
+                key={index}
+                src={imageUrl}
+                alt={`Trip Image ${index + 1}`}
+                width={600}
+                height={400}
+                onError={(e) => {
+                  e.target.src = `/assets/images/sample${index + 1}.jpg`;
+                }}
+              />
+            ))
+          ) : (
+            <>
+              <Image
+                src="/assets/images/sample.jpeg"
+                alt="Trip Image"
+                width={600}
+                height={400}
+              />
+              <Image
+                src="/assets/images/sample1.jpg"
+                alt="Trip Image"
+                width={600}
+                height={400}
+              />
+              <Image
+                src="/assets/images/sample2.jpg"
+                alt="Trip Image"
+                width={600}
+                height={400}
+              />
+            </>
+          )}
         </div>
         <div>
           <span>{trip.budget}</span>

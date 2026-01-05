@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import countryList from "../lib/countryList.json";
 import { countryCoords } from "../lib/countryCoords";
@@ -28,6 +27,7 @@ const CreateTrip = () => {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null);
+  const LRef = useRef(null);
   const router = useRouter();
 
   const countryOptions = countryList.map((country) => ({
@@ -62,35 +62,39 @@ const CreateTrip = () => {
       mapRef.current &&
       !mapInstanceRef.current
     ) {
-      // Fix for default marker icons in Next.js
-      delete L.Icon.Default.prototype._getIconUrl;
-      L.Icon.Default.mergeOptions({
-        iconRetinaUrl:
-          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-        iconUrl:
-          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-        shadowUrl:
-          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-      });
+      // Dynamically import Leaflet to avoid SSR issues
+      import("leaflet").then((L) => {
+        LRef.current = L;
+        // Fix for default marker icons in Next.js
+        delete L.Icon.Default.prototype._getIconUrl;
+        L.Icon.Default.mergeOptions({
+          iconRetinaUrl:
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+          iconUrl:
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+          shadowUrl:
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+        });
 
-      mapInstanceRef.current = L.map(mapRef.current).setView([20, 0], 2);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
-        mapInstanceRef.current
-      );
+        mapInstanceRef.current = L.map(mapRef.current).setView([20, 0], 2);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
+          mapInstanceRef.current
+        );
+      });
     }
   }, []);
 
   useEffect(() => {
-    if (country && countryCoords[country]) {
+    if (country && countryCoords[country] && LRef.current) {
       const coords = countryCoords[country];
       if (mapInstanceRef.current) {
         mapInstanceRef.current.setView([coords.lat, coords.lng], 6);
         if (markerRef.current) {
           markerRef.current.setLatLng([coords.lat, coords.lng]);
         } else {
-          markerRef.current = L.marker([coords.lat, coords.lng]).addTo(
-            mapInstanceRef.current
-          );
+          markerRef.current = LRef.current
+            .marker([coords.lat, coords.lng])
+            .addTo(mapInstanceRef.current);
         }
       }
     }
@@ -143,7 +147,7 @@ const CreateTrip = () => {
             const { itinerary } = await response.json();
 
             // Redirect to trip details
-            router.push(`/trip-details/${itinerary.id}`);
+            router.push(`/admin/trip-details/${itinerary.id}`);
           } catch (error) {
             console.error("Error creating trip:", error);
             alert("Failed to create trip. Please try again.");

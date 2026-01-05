@@ -83,7 +83,7 @@ const Dropdown = ({
             />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[calc(var(--radix-popover-trigger-width))]">
+        <PopoverContent className="w-[calc(var(--radix-popover-trigger-width))] z-9999">
           <Command className="w-full">
             {search && (
               <CommandInput

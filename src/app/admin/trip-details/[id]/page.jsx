@@ -1,4 +1,4 @@
-import TripDetail from "@/components/trip-details";
+import TripDetail from "@/components/trip-detail";
 
 const TripDetails = () => {
   return <TripDetail />;

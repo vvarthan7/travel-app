@@ -2,6 +2,29 @@ import { NextRequest, NextResponse } from "next/server";
 import { model } from "@/lib/gemini";
 import { supabase } from "@/lib/supabase";
 
+async function getImages(country: string) {
+  const query = `travel ${country}`;
+  const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=3&orientation=landscape`;
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: process.env.PEXELS_API_KEY || '',
+    },
+  });
+
+  if (!response.ok) {
+    console.error("Failed to fetch images from Pexels");
+    return [
+      "https://via.placeholder.com/600x400?text=No+Image+Available",
+      "https://via.placeholder.com/600x400?text=No+Image+Available",
+      "https://via.placeholder.com/600x400?text=No+Image+Available"
+    ];
+  }
+
+  const data = await response.json();
+  return data.photos.map((photo: any) => photo.src.large);
+}
+
 async function generateItinerary({
   country,
   numberOfDays,
@@ -33,6 +56,7 @@ async function generateItinerary({
     "country": "${country}",
     "interests": "${interests}",
     "groupType": "${groupType}",
+    "images": [],
     "bestTimeToVisit": [
       "🌸 Season (from month to month): reason to visit",
       "☀️ Season (from month to month): reason to visit",
@@ -84,6 +108,9 @@ async function generateItinerary({
     throw new Error(`Invalid JSON response from AI: ${parseError.message}`);
   }
 
+  // Fetch images from Pexels
+  itineraryData.images = await getImages(country);
+
   // Save to Supabase
   const { data, error } = await supabase
     .from("itineraries")
@@ -100,6 +127,7 @@ async function generateItinerary({
       interests: Array.isArray(itineraryData.interests)
         ? itineraryData.interests
         : itineraryData.interests.split(",").map((s) => s.trim()),
+      images: itineraryData.images,
       best_time_to_visit: itineraryData.bestTimeToVisit,
       weather_info: itineraryData.weatherInfo,
       location: itineraryData.location,
