@@ -1,4 +1,6 @@
+import TripDetail from "@/components/trip-details";
+
 const TripDetails = () => {
-  return <div>Trip Details</div>;
+  return <TripDetail />;
 };
 export default TripDetails;
