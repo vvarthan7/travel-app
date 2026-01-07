@@ -2,6 +2,33 @@ import { NextRequest, NextResponse } from "next/server";
 import { model } from "@/lib/gemini";
 import { supabase } from "@/lib/supabase";
 
+async function retryWithBackoff<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  baseDelay: number = 1000
+): Promise<T> {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error: any) {
+      if (attempt === maxRetries) {
+        throw error;
+      }
+      
+      // Check if it's a 503 or rate limit error
+      if (error?.status === 503 || error?.status === 429 || error?.message?.includes('503') || error?.message?.includes('Service Unavailable')) {
+        const delay = baseDelay * Math.pow(2, attempt);
+        console.log(`Attempt ${attempt + 1} failed with 503/429. Retrying in ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      } else {
+        // For other errors, don't retry
+        throw error;
+      }
+    }
+  }
+  throw new Error('Max retries exceeded');
+}
+
 async function getImages(country: string) {
   const query = `travel ${country}`;
   const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=3&orientation=landscape`;
@@ -49,7 +76,7 @@ async function generateItinerary({
   {
     "name": "A descriptive title for the trip",
     "description": "A brief description of the trip and its highlights not exceeding 100 words",
-    "estimatedPrice": "Lowest average price for the trip in USD, e.g.$price",
+    "estimatedPrice": "Lowest average price for the trip in USD, e.g.$500",
     "duration": ${numberOfDays},
     "budget": "${budget}",
     "travelStyle": "${travelStyle}",
@@ -87,8 +114,11 @@ async function generateItinerary({
     ]
   }`;
 
-  // Call Gemini API
-  const result = await model.generateContent(prompt);
+  // Call Gemini API with retry
+  const result = await retryWithBackoff(async () => {
+    const res = await model.generateContent(prompt);
+    return res;
+  }, 5, 2000);
   const response = await result.response;
   const text = response.text();
   console.log("Gemini response text:", text);
