@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import Header from "@/components/header";
+import Banner from "@/components/banner";
 
 export default function Home() {
   const router = useRouter();
@@ -79,5 +81,10 @@ export default function Home() {
     };
   }, []);
 
-  return <div>Home Page</div>;
+  return (
+    <>
+      <Header />
+      <Banner />
+    </>
+  );
 }
